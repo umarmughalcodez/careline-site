@@ -1,0 +1,11 @@
+{
+  "name": "careline-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix careline-app run dev",
+    "build": "npm --prefix careline-app run build",
+    "start": "npm --prefix careline-app run start",
+    "lint": "npm --prefix careline-app run lint"
+  }
+}

@@ -1,0 +1,84 @@
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+  position: relative;
+}
+
+.stepCard {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: clamp(24px, 3vw, 32px);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.stepCard:hover {
+  transform: translateY(-4px);
+  border-color: #bcd9fa;
+  box-shadow: var(--shadow-md);
+}
+
+.stepTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.stepNum {
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--teal);
+  letter-spacing: 0.1em;
+  background: var(--teal-subtle);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.stepIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #f0f7ff;
+  color: var(--blue);
+  display: grid;
+  place-items: center;
+}
+
+.stepCard h3 {
+  color: var(--navy);
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+.stepCard p {
+  font-size: 0.94rem;
+  color: #586f84;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.deliverable {
+  margin-top: auto;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--pale);
+  border-left: 3px solid var(--teal);
+  font-size: 0.8rem;
+  color: #3b5368;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .stepsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

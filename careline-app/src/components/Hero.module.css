@@ -1,0 +1,463 @@
+.hero {
+  background: 
+    radial-gradient(circle at 85% 20%, rgba(216, 246, 240, 0.6) 0%, transparent 40%),
+    radial-gradient(circle at 15% 85%, rgba(225, 234, 255, 0.5) 0%, transparent 35%),
+    linear-gradient(135deg, #f4f8ff 0%, #f7fbfb 100%);
+  padding: clamp(52px, 7vw, 92px) 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  align-items: center;
+  gap: clamp(36px, 5vw, 64px);
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.heroHeading {
+  margin: 20px 0 22px;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, var(--blue) 0%, #158578 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.heroLead {
+  font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.18rem);
+  color: #49637c;
+  max-width: 540px;
+  margin-bottom: 30px;
+  line-height: 1.65;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.micro {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.84rem;
+  color: #647a8f;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.microItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.microDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #a0b2c3;
+}
+
+/* Hero Art & Interactive Dashboard */
+.heroArt {
+  position: relative;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.orb {
+  position: absolute;
+  width: clamp(260px, 32vw, 360px);
+  height: clamp(260px, 32vw, 360px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200, 238, 233, 0.8) 0%, rgba(225, 234, 255, 0.6) 100%);
+  filter: blur(28px);
+  right: 5%;
+  top: 5%;
+  z-index: 0;
+  animation: pulseGlow 6s infinite ease-in-out;
+}
+
+.dashboard {
+  position: relative;
+  z-index: 2;
+  width: min(430px, 100%);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 234, 242, 0.95);
+  border-radius: var(--radius-xl);
+  box-shadow: 
+    0 12px 30px -10px rgba(16, 42, 67, 0.08),
+    0 30px 65px -15px rgba(22, 58, 91, 0.16);
+  padding: 24px;
+  transform: rotate(0.8deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow: 
+    0 16px 36px -10px rgba(16, 42, 67, 0.1),
+    0 36px 75px -15px rgba(22, 58, 91, 0.2);
+}
+
+.dashHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #edf1f5;
+  padding-bottom: 16px;
+}
+
+.dashTitle {
+  font-weight: 800;
+  color: var(--navy);
+  font-size: 1.05rem;
+}
+
+.dashSub {
+  font-size: 0.78rem;
+  color: #7b8e9f;
+  margin-top: 3px;
+}
+
+.liveTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: #0d7667;
+  background: #e3f8f2;
+  padding: 5px 10px;
+  border-radius: 99px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(22, 129, 111, 0.2);
+}
+
+.liveTagDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.metricRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.metric {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e7edf3;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  transition: background var(--transition-fast);
+}
+
+.metric:hover {
+  background: #edf3f8;
+}
+
+.metric strong {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 1.55rem;
+  color: var(--navy);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.metric strong small {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.metric span {
+  display: block;
+  font-size: 0.76rem;
+  color: #687c8f;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.callList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.callItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.callItem:hover {
+  background: #f8fafc;
+  border-color: #dbe5ee;
+  transform: translateX(2px);
+}
+
+.callItem.active {
+  background: #f0f7ff;
+  border-color: #bcd9fa;
+}
+
+.callIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: #eaf1ff;
+  color: var(--blue);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.callIconCalendar {
+  background: #e3f8f2;
+  color: #138777;
+}
+
+.callIconFollow {
+  background: #fff3e2;
+  color: #c47c1b;
+}
+
+.callInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.callInfo strong {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.callInfo small {
+  display: block;
+  color: #7b8e9f;
+  font-size: 0.76rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.callCheck {
+  color: #169780;
+  font-weight: 800;
+  font-size: 0.88rem;
+  background: #e6f8f3;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* Expandable simulated activity details */
+.activityDetail {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: #f0f6fc;
+  border: 1px solid #d4e4f2;
+  font-size: 0.8rem;
+  color: #334d65;
+  animation: fadeIn 0.2s ease;
+}
+
+.activityDetailHeader {
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Floating badges */
+.floatCard {
+  position: absolute;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #e1ebf4;
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  box-shadow: 0 14px 34px rgba(16, 42, 67, 0.12);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.25s ease;
+}
+
+.floatCard:hover {
+  transform: translateY(-2px);
+}
+
+.floatIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #eef5ff;
+  color: var(--blue);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.floatIconCheck {
+  background: #e5f8f3;
+  color: #128373;
+}
+
+.floatCard b {
+  display: block;
+  color: var(--navy);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.floatCard span {
+  display: block;
+  color: #697d91;
+  font-size: 0.76rem;
+}
+
+.floatOne {
+  left: -20px;
+  bottom: 24px;
+  animation: floatSlow 5s infinite ease-in-out;
+}
+
+.floatTwo {
+  right: -20px;
+  top: 24px;
+  animation: floatReverse 6s infinite ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+  .floatOne {
+    left: 0;
+    bottom: 16px;
+  }
+  .floatTwo {
+    right: 0;
+    top: 16px;
+  }
+}
+
+@media (max-width: 860px) {
+  .hero {
+    padding: 48px 0;
+  }
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .heroContent {
+    align-items: flex-start;
+  }
+  .heroArt {
+    min-height: 400px;
+  }
+  .orb {
+    right: 15%;
+    width: 280px;
+    height: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 38px 0 46px;
+  }
+  .heroLead {
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+  .heroArt {
+    min-height: 350px;
+  }
+  .dashboard {
+    padding: 16px;
+    transform: rotate(0deg);
+  }
+  .floatCard {
+    position: static;
+    margin-top: 12px;
+    width: 100%;
+    animation: none;
+  }
+  .floatOne, .floatTwo {
+    animation: none;
+  }
+}
+
+.floatAnimation {
+  animation: floatBob 4s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Smooth top-to-bottom drift, seamless loop */
+@keyframes floatBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* No delay — both badges move in the same motion, in sync */
+.floatOne {
+  animation-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floatAnimation {
+    animation: none;
+  }
+}

@@ -1,0 +1,73 @@
+.topbar {
+  background: var(--navy);
+  color: #eaf3ff;
+  font-size: 0.82rem;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topbarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.leftGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #dbe7f5;
+}
+
+.liveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  background: rgba(28, 155, 145, 0.2);
+  color: #5eead4;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-weight: 600;
+  border: 1px solid rgba(94, 234, 212, 0.3);
+}
+
+.liveBadgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2dd4bf;
+}
+
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 0.8rem;
+  color: #b7cde3;
+}
+
+.contactLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #eaf3ff;
+  transition: color var(--transition-fast);
+}
+
+.contactLink:hover {
+  color: #67e8f9;
+}
+
+@media (max-width: 768px) {
+  .topbarContainer {
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+  }
+  .rightGroup {
+    display: none;
+  }
+}

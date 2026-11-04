@@ -1,0 +1,149 @@
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.5vw, 24px);
+}
+
+.serviceCard {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: clamp(22px, 3vw, 32px);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.serviceCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+  transition: background var(--transition-fast);
+}
+
+.serviceCard:hover {
+  transform: translateY(-5px);
+  border-color: #c9dbeb;
+  box-shadow: var(--shadow-lg);
+}
+
+.cardBlue:hover::before {
+  background: linear-gradient(90deg, var(--blue), #4a8df8);
+}
+
+.cardTeal:hover::before {
+  background: linear-gradient(90deg, var(--teal), #34d399);
+}
+
+.cardAmber:hover::before {
+  background: linear-gradient(90deg, #d97706, #fbbf24);
+}
+
+.iconbox {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #eaf1ff;
+  color: var(--blue);
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+  transition: transform var(--transition-fast);
+}
+
+.serviceCard:hover .iconbox {
+  transform: scale(1.08);
+}
+
+.iconboxTeal {
+  background: #e4f7f2;
+  color: #128878;
+}
+
+.iconboxAmber {
+  background: #fef3e2;
+  color: #b46b08;
+}
+
+.badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 12px;
+  width: fit-content;
+}
+
+.badgeBlue {
+  background: #edf4fe;
+  color: var(--blue);
+}
+
+.badgeTeal {
+  background: #e1f7f1;
+  color: var(--teal);
+}
+
+.badgeAmber {
+  background: #fef3e2;
+  color: #b46b08;
+}
+
+.serviceCard h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+  font-size: 1.25rem;
+}
+
+.serviceCard p {
+  color: #556c80;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.featureList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid #edf2f7;
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: #486177;
+}
+
+.featureIcon {
+  color: var(--teal);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+@media (max-width: 960px) {
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+}
