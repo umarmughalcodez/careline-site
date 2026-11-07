@@ -1,3 +1,13 @@
+.marqueeSection {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 8px 0;
+  background: #f2f7fb;
+  border-top: 1px solid #dce6ef;
+  border-bottom: 1px solid #dce6ef;
+}
+
 .page {
   --background: #fafafa;
   --foreground: #fff;

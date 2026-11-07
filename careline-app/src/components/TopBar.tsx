@@ -27,7 +27,7 @@ export default function TopBar() {
           <span className={styles.divider}>|</span>
           <span className={styles.trustItem}>
             <ShieldCheck size={14} color="#5eead4" aria-hidden="true" />
-            <span className={styles.trustFull}>HIPAA-Trained</span>
+            <span className={styles.trustFull}>Clinic-approved workflows</span>
           </span>
         </div>
       </div>

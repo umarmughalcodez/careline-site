@@ -10,6 +10,7 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import CurvedLoop from "@/components/HomepageLoop";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (
@@ -20,7 +21,16 @@ export default function Home() {
         <Reveal as="div">
           <Hero />
         </Reveal>
-        {/* <CurvedLoop /> */}
+        <section className={styles.marqueeSection} aria-label="CareLine patient-first promise">
+          <CurvedLoop
+            marqueeText="EVERY CALL MATTERS ✦ EVERY PATIENT COUNTS ✦ RECEPTION SUPPORT THAT CARES ✦ CARELINE MEDICAL RECEPTION ✦"
+            speed={1.5}
+            curveAmount={30}
+            direction="left"
+            interactive
+            pauseOnHover={false}
+          />
+        </section>
         <Reveal as="div" delay={80}>
           <Services />
         </Reveal>

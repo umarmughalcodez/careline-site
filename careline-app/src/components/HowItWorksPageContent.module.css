@@ -1,0 +1,377 @@
+.page {
+  color: var(--ink);
+  background: #fff;
+}
+
+.hero {
+  padding: clamp(52px, 7vw, 84px) 0;
+  background: linear-gradient(115deg, #f2f7fb 0%, #fbfcfc 57%, #edf7f4 100%);
+  border-bottom: 1px solid var(--line);
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(30px, 5vw, 70px);
+  align-items: center;
+}
+
+.heroCopy {
+  max-width: 580px;
+}
+
+.heroKicker,
+.kicker,
+.finalKicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #16786f;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.heroKicker {
+  margin-bottom: 17px;
+}
+
+.heroKicker > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d99a31;
+  box-shadow: 0 0 0 4px rgba(217, 154, 49, 0.14);
+}
+
+.heroCopy h1 {
+  max-width: 14ch;
+  margin: 0 0 18px;
+  font-size: 3.5rem;
+  line-height: 1.05;
+}
+
+.heroCopy > p {
+  max-width: 58ch;
+  margin: 0 0 24px;
+  color: #566d7e;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+}
+
+.heroActions .btn {
+  min-height: 48px;
+}
+
+.heroIllustration {
+  overflow: hidden;
+  min-width: 0;
+}
+
+.sectionHeading {
+  max-width: 690px;
+  margin-bottom: 28px;
+}
+
+.sectionHeading h2 {
+  margin: 8px 0 10px;
+  font-size: 2.35rem;
+  line-height: 1.14;
+}
+
+.sectionHeading p {
+  color: #627687;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.benefitSection,
+.checklistSection {
+  padding: clamp(48px, 6vw, 72px) 0;
+}
+
+.benefitSection {
+  background: #fff;
+}
+
+.benefitGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.benefitCard {
+  min-height: 172px;
+  padding: 22px 24px;
+  border-right: 1px solid var(--line);
+}
+
+.benefitCard:first-child {
+  padding-left: 0;
+}
+
+.benefitCard:last-child {
+  padding-right: 0;
+  border-right: 0;
+}
+
+.benefitIcon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 15px;
+  place-items: center;
+  border-radius: 8px;
+}
+
+.blue { background: #e8f0fc; color: #2864dc; }
+.teal { background: #e2f4ef; color: #168477; }
+.amber { background: #fff1dc; color: #a66c16; }
+
+.benefitCard h3 {
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.benefitCard p {
+  max-width: 34ch;
+  color: #627687;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.checklistSection {
+  background: #f2f7fb;
+  border-block: 1px solid var(--line);
+}
+
+.checklistLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(28px, 6vw, 76px);
+  align-items: center;
+}
+
+.checklistLayout .sectionHeading {
+  margin-bottom: 0;
+}
+
+.checklist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #425c6e;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.checklist li > span {
+  display: grid;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 50%;
+  background: #dff2eb;
+  color: #14796e;
+}
+
+.finalCta {
+  padding: clamp(48px, 6vw, 76px) 0;
+  background: linear-gradient(125deg, #123f64, #176d70 68%, #188779);
+  color: #fff;
+  scroll-margin-top: 96px;
+}
+
+.finalCtaGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1.24fr);
+  gap: clamp(28px, 5vw, 60px);
+  align-items: center;
+}
+
+.finalCtaCopy {
+  max-width: 470px;
+}
+
+.finalKicker {
+  color: #9ce5d8;
+}
+
+.finalCtaCopy h2 {
+  margin: 12px 0;
+  color: #fff;
+  font-size: 2.55rem;
+  line-height: 1.13;
+}
+
+.finalCtaCopy > p {
+  color: #d3e7ed;
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.callNote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  color: #c5e8e2;
+  font-size: 0.8rem;
+}
+
+.callNote svg {
+  flex: 0 0 auto;
+}
+
+.schedulerPanel {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 18px 44px rgba(4, 25, 39, 0.2);
+}
+
+.schedulerPanel :global(.discoveryForm) {
+  gap: 14px;
+}
+
+.schedulerPanel :global(.summaryRow) {
+  align-items: flex-start;
+}
+
+@media (max-width: 980px) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 28px;
+  }
+
+  .heroCopy h1 {
+    font-size: 2.8rem;
+  }
+
+  .checklistLayout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .finalCtaGrid {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: 26px;
+  }
+}
+
+@media (max-width: 760px) {
+  .heroGrid,
+  .finalCtaGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroCopy {
+    max-width: 650px;
+  }
+
+  .heroIllustration {
+    width: min(100%, 620px);
+    margin-inline: auto;
+  }
+
+  .finalCtaCopy {
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    padding: 48px 0 38px;
+  }
+
+  .heroCopy h1 {
+    font-size: 2.35rem;
+  }
+
+  .heroCopy > p {
+    font-size: 0.94rem;
+  }
+
+  .heroActions {
+    flex-direction: column;
+  }
+
+  .heroActions .btn {
+    width: 100%;
+  }
+
+  .sectionHeading h2 {
+    font-size: 1.9rem;
+  }
+
+  .benefitSection,
+  .checklistSection {
+    padding: 46px 0;
+  }
+
+  .benefitGrid,
+  .checklist {
+    grid-template-columns: 1fr;
+  }
+
+  .benefitCard,
+  .benefitCard:first-child,
+  .benefitCard:last-child {
+    min-height: 0;
+    padding: 18px 0;
+    border-right: 0;
+  }
+
+  .benefitCard + .benefitCard {
+    border-top: 1px solid var(--line);
+  }
+
+  .benefitIcon {
+    margin-bottom: 11px;
+  }
+
+  .checklist {
+    gap: 12px;
+  }
+
+  .finalCta {
+    padding: 44px 0;
+  }
+
+  .finalCtaCopy h2 {
+    font-size: 2.15rem;
+  }
+
+  .schedulerPanel {
+    padding: 17px 13px;
+  }
+
+  .schedulerPanel :global(.summaryRow) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .schedulerPanel :global(.summaryRow .btn) {
+    width: 100%;
+  }
+}

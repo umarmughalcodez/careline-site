@@ -27,7 +27,7 @@ export default function Footer() {
             <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "0.76rem", color: "#6ee7b7" }}>
                 <ShieldCheck size={14} />
-                <span>HIPAA-Conscious Procedures</span>
+                <span>Clinic-approved workflows</span>
               </span>
             </div>
           </div>
