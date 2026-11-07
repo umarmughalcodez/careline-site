@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Email delivery
+
+The `/api/contact` and `/api/discovery` routes send email through Nodemailer. Configure these server-side environment variables in the deployment platform and redeploy:
+
+- `CONTACT_TO_EMAIL`: inbox that receives website inquiries.
+- `GMAIL_USER` and `GMAIL_APP_PASSWORD`, or `SMTP_USER` and `SMTP_PASS`.
+- `SMTP_HOST`, `SMTP_PORT`, and `SMTP_SECURE` when using a non-default SMTP server. Defaults are Gmail on port 465 with TLS.
+
+Do not expose these values with a `NEXT_PUBLIC_` prefix or commit them to the repository.
+
 ## Getting Started
 
 First, run the development server:

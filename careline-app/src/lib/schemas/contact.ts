@@ -72,5 +72,19 @@ export const contactSchema = z.object({
   honeypot: z.string().max(0).optional().or(z.literal("")),
 });
 
+export const quickInquirySchema = z.object({
+  formType: z.literal("quick"),
+  name: z.string().trim().min(2, "Please enter your full name."),
+  clinicName: z.string().trim().min(2, "Please tell us your clinic name."),
+  workEmail: z.string().trim().email("Please use a valid work email."),
+  coverage: z.enum(coverageOptions),
+  message: z.string().trim().max(600, "Please keep your message under 600 characters.").optional().or(z.literal("")),
+  consent: z.boolean().refine((value) => value, {
+    message: "Please confirm you agree to be contacted.",
+  }),
+  honeypot: z.string().max(0).optional().or(z.literal("")),
+});
+
 export type ContactFormValues = z.infer<typeof contactSchema>;
+export type QuickInquiryValues = z.infer<typeof quickInquirySchema>;
 export { coverageOptions };

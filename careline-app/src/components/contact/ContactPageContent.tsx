@@ -27,7 +27,7 @@ const contactOptions = [
     tint: "blue",
     icon: Mail,
     title: "Email us",
-    value: "buycrazeshop@gmail.com",
+    value: "test@gmail.com",
     helper: "Reply within one business day",
     action: "Copy email",
     href: "mailto:buycrazeshop@gmail.com",

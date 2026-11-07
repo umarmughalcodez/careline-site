@@ -7,8 +7,6 @@ import {
   MapPin,
   Clock,
   Send,
-  CheckCircle,
-  Copy,
 } from "lucide-react";
 
 interface FormDataState {
@@ -17,19 +15,24 @@ interface FormDataState {
   email: string;
   coverage: string;
   message: string;
+  consent: boolean;
 }
 
-export default function ContactSection() {
-  const [formData, setFormData] = useState<FormDataState>({
-    name: "",
-    clinic: "",
-    email: "",
-    coverage: "Weekday call support",
-    message: "",
-  });
+type SubmissionState = "idle" | "sending" | "success" | "error";
 
-  const [submitted, setSubmitted] = useState<boolean>(false);
-  const [copied, setCopied] = useState<boolean>(false);
+const initialFormData: FormDataState = {
+  name: "",
+  clinic: "",
+  email: "",
+  coverage: "Weekday call support",
+  message: "",
+  consent: false,
+};
+
+export default function ContactSection() {
+  const [formData, setFormData] = useState<FormDataState>(initialFormData);
+  const [submissionState, setSubmissionState] = useState<SubmissionState>("idle");
+  const [submissionMessage, setSubmissionMessage] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -38,44 +41,42 @@ export default function ContactSection() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const subject = encodeURIComponent(
-      `Virtual receptionist inquiry — ${formData.clinic}`
-    );
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\n` +
-      `Clinic: ${formData.clinic}\n` +
-      `Work email: ${formData.email}\n` +
-      `Coverage needed: ${formData.coverage}\n\n` +
-      `Needs: ${formData.message || "Not specified"}`
-    );
-
-    const mailtoUrl = `mailto:hello@youragency.com?subject=${subject}&body=${body}`;
-
-    // Open email client via window.location
-    window.location.href = mailtoUrl;
-
-    // Show modal dialog feedback
-    setSubmitted(true);
-  };
-
-  const handleCopySummary = async () => {
-    const textToCopy = 
-      `Inquiry for CareLine Medical Reception\n` +
-      `Name: ${formData.name}\n` +
-      `Clinic: ${formData.clinic}\n` +
-      `Email: ${formData.email}\n` +
-      `Coverage: ${formData.coverage}\n` +
-      `Details: ${formData.message}`;
+    setSubmissionState("sending");
+    setSubmissionMessage("");
 
     try {
-      await navigator.clipboard.writeText(textToCopy);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch (err) {
-      console.error("Clipboard copy failed", err);
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          formType: "quick",
+          name: formData.name,
+          clinicName: formData.clinic,
+          workEmail: formData.email,
+          coverage: formData.coverage,
+          message: formData.message,
+          consent: formData.consent,
+          honeypot: "",
+        }),
+      });
+      const payload = await response.json().catch(() => null) as {
+        message?: string;
+        errors?: Record<string, string[]>;
+      } | null;
+
+      if (!response.ok) {
+        const firstError = Object.values(payload?.errors ?? {}).flat()[0];
+        throw new Error(firstError || payload?.message || "We couldn’t send your inquiry. Please try again.");
+      }
+
+      setSubmissionState("success");
+      setSubmissionMessage("Inquiry sent. Thank you for getting in touch.");
+      setFormData(initialFormData);
+    } catch (error) {
+      setSubmissionState("error");
+      setSubmissionMessage(error instanceof Error ? error.message : "We couldn’t send your inquiry. Please try again.");
     }
   };
 
@@ -96,8 +97,8 @@ export default function ContactSection() {
                 <Mail size={18} />
               </div>
               <div>
-                <b>Email inquiry</b>
-                <a href="mailto:hello@youragency.com">hello@youragency.com</a>
+                <b>Send an inquiry</b>
+                <span>Use the form to reach our team.</span>
               </div>
             </div>
 
@@ -116,15 +117,13 @@ export default function ContactSection() {
                 <Clock size={18} />
               </div>
               <div>
-                <b>Response time</b>
-                <span>Within 2 business hours</span>
+                <b>What happens next</b>
+                <span>We&apos;ll reply to your work email.</span>
               </div>
             </div>
           </div>
 
-          <p className={styles.disclaimer}>
-            Replace the sample email and agency details before publishing to your production domain.
-          </p>
+
         </div>
 
         {/* Right Column: Inquiry Form */}
@@ -193,7 +192,7 @@ export default function ContactSection() {
                 <option value="Weekday call support">Weekday call support (8am - 5pm)</option>
                 <option value="Extended-hour coverage">Extended-hour coverage (Evenings & Weekends)</option>
                 <option value="Overflow call handling">Overflow call handling (Peak busy hours)</option>
-                <option value="24/7 coverage discussion">24/7 coverage discussion</option>
+                <option value="24/7 discussion">24/7 coverage discussion</option>
               </select>
             </div>
 
@@ -206,95 +205,38 @@ export default function ContactSection() {
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
+                maxLength={600}
                 placeholder="For example: missed calls during lunch hour, appointment intake requests, after-hours coverage…"
                 className={styles.textarea}
               />
             </div>
 
+            <label className={`${styles.field} ${styles.full} ${styles.consentField}`}>
+              <span className={styles.consentLabel}>
+                <input
+                  type="checkbox"
+                  name="consent"
+                  checked={formData.consent}
+                  onChange={(event) => setFormData((previous) => ({ ...previous, consent: event.target.checked }))}
+                  required
+                />
+                <span>I agree to be contacted about this inquiry.</span>
+              </span>
+            </label>
+
             <div className={`${styles.field} ${styles.full}`}>
-              <button className="btn" type="submit" style={{ width: "100%" }}>
-                <span>Prepare inquiry email</span>
+              <button className="btn" type="submit" disabled={submissionState === "sending"} style={{ width: "100%" }}>
+                <span>{submissionState === "sending" ? "Sending inquiry..." : "Send inquiry"}</span>
                 <Send size={16} aria-hidden="true" />
               </button>
             </div>
 
-            <p className={styles.formNote}>
-              Demo form: it opens an email draft in your default mail app. Connect a real form service or your business inbox before publishing.
+            <p className={styles.formNote} role={submissionState === "error" ? "alert" : "status"} aria-live="polite">
+              {submissionMessage || "Your inquiry will be sent to the CareLine team."}
             </p>
           </form>
         </div>
       </div>
-
-      {/* Confirmation Modal */}
-      {submitted && (
-        <div
-          className={styles.modalOverlay}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-          onClick={() => setSubmitted(false)}
-        >
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <div className={styles.modalCheckIcon}>
-                <CheckCircle size={28} />
-              </div>
-              <div>
-                <h3 id="modal-title">Email Draft Prepared!</h3>
-                <p style={{ fontSize: "0.85rem", color: "#61778c" }}>
-                  Your email client has been triggered with the details below.
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.modalSummary}>
-              <div className={styles.modalSummaryRow}>
-                <span>Clinic:</span>
-                <b>{formData.clinic}</b>
-              </div>
-              <div className={styles.modalSummaryRow}>
-                <span>Contact Name:</span>
-                <b>{formData.name}</b>
-              </div>
-              <div className={styles.modalSummaryRow}>
-                <span>Work Email:</span>
-                <b>{formData.email}</b>
-              </div>
-              <div className={styles.modalSummaryRow}>
-                <span>Coverage Needed:</span>
-                <b>{formData.coverage}</b>
-              </div>
-              {formData.message && (
-                <div style={{ marginTop: "4px" }}>
-                  <span style={{ fontSize: "0.78rem", color: "#718598" }}>Specific Needs:</span>
-                  <p style={{ color: "var(--navy)", marginTop: "2px" }}>{formData.message}</p>
-                </div>
-              )}
-            </div>
-
-            <div className={styles.modalActions}>
-              <button
-                type="button"
-                className="btn secondary"
-                onClick={handleCopySummary}
-                style={{ flex: "1" }}
-              >
-                <Copy size={16} />
-                <span>{copied ? "Copied to clipboard!" : "Copy inquiry text"}</span>
-              </button>
-
-              <button
-                type="button"
-                className="btn"
-                onClick={() => setSubmitted(false)}
-                style={{ flex: "1" }}
-              >
-                <span>Done</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

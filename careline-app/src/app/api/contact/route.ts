@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { contactSchema } from "../../../lib/schemas/contact";
+import { contactSchema, quickInquirySchema } from "../../../lib/schemas/contact";
 import { clientIp, rateLimited, sendNotification } from "../../../lib/mailer";
 
 // export const runtime = "nodejs";
@@ -21,18 +21,43 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const parsed = contactSchema.safeParse(body);
-  if (!parsed.success) {
-    return NextResponse.json(
-      { message: "Please check the highlighted fields.", errors: parsed.error.flatten().fieldErrors },
-      { status: 422 }
-    );
-  }
+  let notification: Parameters<typeof sendNotification>[0];
+  const isQuickInquiry = (body as { formType?: unknown } | null)?.formType === "quick";
 
-  const d = parsed.data;
+  if (isQuickInquiry) {
+    const parsed = quickInquirySchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { message: "Please check the highlighted fields.", errors: parsed.error.flatten().fieldErrors },
+        { status: 422 }
+      );
+    }
 
-  try {
-    await sendNotification({
+    const d = parsed.data;
+    notification = {
+      title: "New website inquiry",
+      subject: `New inquiry: ${d.clinicName} (${d.name})`,
+      replyTo: d.workEmail,
+      rows: [
+        ["Name", d.name],
+        ["Clinic", d.clinicName],
+        ["Work email", d.workEmail],
+        ["Coverage needed", d.coverage],
+        ["Message", d.message || "Not specified"],
+        ["Consent to be contacted", "Yes"],
+      ],
+    };
+  } else {
+    const parsed = contactSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { message: "Please check the highlighted fields.", errors: parsed.error.flatten().fieldErrors },
+        { status: 422 }
+      );
+    }
+
+    const d = parsed.data;
+    notification = {
       title: "New website inquiry",
       subject: `New inquiry: ${d.clinicName} (${d.name})`,
       replyTo: d.workEmail,
@@ -51,7 +76,11 @@ export async function POST(req: Request) {
         ["Message", d.message],
         ["Consent to be contacted", d.consent ? "Yes" : "No"],
       ],
-    });
+    };
+  }
+
+  try {
+    await sendNotification(notification);
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[contact] email failed:", err);

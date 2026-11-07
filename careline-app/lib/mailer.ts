@@ -3,16 +3,32 @@ import type { Transporter } from "nodemailer";
 
 let transporter: Transporter | null = null;
 
-function getTransporter() {
-  const user = process.env.GMAIL_USER;
-  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s/g, "");
-  if (!user || !pass) throw new Error("Email is not configured (GMAIL_USER / GMAIL_APP_PASSWORD).");
+function getMailCredentials() {
+  const user = process.env.GMAIL_USER?.trim() || process.env.SMTP_USER?.trim();
+  const gmailPassword = process.env.GMAIL_APP_PASSWORD?.replace(/\s/g, "");
+  const pass = gmailPassword || process.env.SMTP_PASS?.trim();
+  if (!user || !pass) {
+    throw new Error("Email is not configured. Set GMAIL_USER and GMAIL_APP_PASSWORD, or SMTP_USER and SMTP_PASS.");
+  }
+  return { user, pass };
+}
 
+function getTransporter() {
+  const { user, pass } = getMailCredentials();
   if (!transporter) {
+    const host = process.env.SMTP_HOST?.trim() || "smtp.gmail.com";
+    const portValue = process.env.SMTP_PORT?.trim();
+    const port = portValue ? Number(portValue) : host === "smtp.gmail.com" ? 465 : 587;
+    if (!Number.isInteger(port) || port < 1 || port > 65535) {
+      throw new Error("SMTP_PORT must be a valid port number.");
+    }
+    const secureValue = process.env.SMTP_SECURE?.trim().toLowerCase();
+    const secure = secureValue ? secureValue === "true" : port === 465;
+
     transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      host,
+      port,
+      secure,
       auth: { user, pass },
     });
   }
@@ -36,8 +52,8 @@ export async function sendNotification(opts: {
   rows: MailRow[];
   replyTo?: string;
 }) {
-  const from = process.env.GMAIL_USER!;
-  const to = process.env.CONTACT_TO_EMAIL || from;
+  const { user: from } = getMailCredentials();
+  const to = process.env.CONTACT_TO_EMAIL?.trim() || from;
 
   const text = `${opts.title}\n\n${opts.rows.map(([k, v]) => `${k}: ${v || "-"}`).join("\n")}`;
 
