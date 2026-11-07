@@ -219,7 +219,7 @@
   .mobileToggle {
     display: flex;
   }
-  .navActions .btn {
+  .navActions :global(.btn) {
     display: none;
   }
 }

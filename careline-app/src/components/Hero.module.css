@@ -393,7 +393,7 @@
     padding: 48px 0;
   }
   .heroGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 40px;
   }
   .heroContent {
@@ -418,7 +418,9 @@
     margin-bottom: 24px;
   }
   .heroArt {
-    min-height: 350px;
+    min-height: 0;
+    flex-direction: column;
+    gap: 12px;
   }
   .dashboard {
     padding: 16px;
@@ -426,8 +428,8 @@
   }
   .floatCard {
     position: static;
-    margin-top: 12px;
     width: 100%;
+    max-width: 430px;
     animation: none;
   }
   .floatOne, .floatTwo {
