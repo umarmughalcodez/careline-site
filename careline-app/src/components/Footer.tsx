@@ -17,7 +17,7 @@ export default function Footer() {
         <div className={styles.footerGrid}>
           {/* Brand Col */}
           <div className={styles.footerBrand}>
-            <a href="#home" className={styles.brandLink}>
+            <a href="/" className={styles.brandLink}>
               <span className={styles.logo} aria-hidden="true">✚</span>
               <span>CareLine Reception</span>
             </a>

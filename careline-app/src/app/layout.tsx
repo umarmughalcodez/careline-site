@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import ToasterProvider from "../components/ToastProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -49,7 +50,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ToasterProvider />
+      </body>
     </html>
   );
 }

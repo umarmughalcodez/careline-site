@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import styles from "./Navbar.module.css";
 import { Menu, X, ArrowRight, Phone, ChevronRight } from "lucide-react";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -38,10 +40,10 @@ export default function Navbar() {
   }, [drawerOpen]);
 
   const navItems = [
-    { label: "Services", href: "#services" },
-    { label: "Why CareLine", href: "#about" },
-    { label: "Coverage Estimator", href: "#calculator" },
-    { label: "How it works", href: "#how" },
+    { label: "Services", href: "/services" },
+    { label: "Why CareLine", href: "/about" },
+    { label: "Coverage Estimator", href: "/calculator" },
+    { label: "How it works", href: "/how" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -53,7 +55,7 @@ export default function Navbar() {
     <>
       <header className={`${styles.navWrapper} ${scrolled ? styles.scrolled : ""}`}>
         <div className={`container ${styles.nav}`}>
-          <a className={styles.brand} href="#home" aria-label="CareLine Home">
+          <a className={styles.brand} href="/" aria-label="CareLine Home">
             <span className={styles.logo} aria-hidden="true">✚</span>
             <span>
               CareLine <span className={styles.brandSub}>Medical Reception</span>
@@ -65,7 +67,7 @@ export default function Navbar() {
               <a
                 key={item.href}
                 href={item.href}
-                className={`${styles.navLink} ${item.href === "/contact" ? styles.active : ""}`}
+                className={`${styles.navLink} ${item.href === pathname ? styles.active : ""}`}
               >
                 {item.label}
               </a>

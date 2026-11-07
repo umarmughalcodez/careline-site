@@ -1,60 +1,62 @@
 import { NextResponse } from "next/server";
-import { contactSchema } from "@/lib/schemas/contact";
-import { sendStructuredEmail } from "@/lib/email";
+import { contactSchema } from "../../../lib/schemas/contact";
+import { clientIp, rateLimited, sendNotification } from "../../../lib/mailer";
 
-export async function POST(request: Request) {
+// export const runtime = "nodejs";
+// export const dynamic = "force-dynamic";
+
+export async function POST(req: Request) {
+  if (rateLimited(clientIp(req))) {
+    return NextResponse.json({ message: "Too many requests. Please try again in a few minutes." }, { status: 429 });
+  }
+
+  let body: unknown;
   try {
-    const body = await request.json();
-    const parsed = contactSchema.safeParse(body);
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ message: "Invalid request." }, { status: 400 });
+  }
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        {
-          message: "Validation failed.",
-          errors: parsed.error.flatten().fieldErrors,
-        },
-        { status: 400 }
-      );
-    }
+  if ((body as { honeypot?: string } | null)?.honeypot) {
+    return NextResponse.json({ ok: true });
+  }
 
-    const to = process.env.CONTACT_TO_EMAIL || "buycrazeshop@gmail.com";
-    const data = parsed.data;
+  const parsed = contactSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { message: "Please check the highlighted fields.", errors: parsed.error.flatten().fieldErrors },
+      { status: 422 }
+    );
+  }
 
-    await sendStructuredEmail({
-      to,
-      subject: `New contact inquiry from ${data.clinicName}`,
-      heading: "New clinic inquiry",
-      replyTo: data.workEmail,
+  const d = parsed.data;
+
+  try {
+    await sendNotification({
+      title: "New website inquiry",
+      subject: `New inquiry: ${d.clinicName} (${d.name})`,
+      replyTo: d.workEmail,
       rows: [
-        { label: "Full name", value: data.name },
-        { label: "Clinic name", value: data.clinicName },
-        { label: "Work email", value: data.workEmail },
-        { label: "Phone", value: data.phone || "Not provided" },
-        { label: "Role", value: data.role },
-        { label: "Practice type", value: data.practiceType },
-        { label: "Providers", value: data.providers },
-        { label: "Coverage needs", value: data.coverage.join(", ") },
-        { label: "Scheduling software", value: data.schedulingSoftware || "Not provided" },
-        { label: "Preferred contact", value: data.preferredContactMethod },
-        { label: "Preferred time", value: data.preferredTime },
-        { label: "Message", value: data.message },
+        ["Name", d.name],
+        ["Clinic", d.clinicName],
+        ["Work email", d.workEmail],
+        ["Phone", d.phone ?? ""],
+        ["Role", d.role],
+        ["Practice type", d.practiceType],
+        ["Providers", d.providers],
+        ["Coverage needed", d.coverage.join(", ")],
+        ["Scheduling software", d.schedulingSoftware ?? ""],
+        ["Preferred contact", d.preferredContactMethod],
+        ["Preferred time", d.preferredTime],
+        ["Message", d.message],
+        ["Consent to be contacted", d.consent ? "Yes" : "No"],
       ],
     });
-
-    return NextResponse.json({
-      success: true,
-      message: "Inquiry received.",
-      data,
-    });
-  } catch (error) {
-    console.error("Contact API error:", error);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("[contact] email failed:", err);
     return NextResponse.json(
-      {
-        message:
-          error instanceof Error && error.message.includes("SMTP")
-            ? "Email delivery is not configured yet. Add SMTP_PASS to enable sending."
-            : "Something went wrong while submitting the inquiry.",
-      },
+      { message: "We couldn’t send your message right now. Please try again or email us directly." },
       { status: 500 }
     );
   }

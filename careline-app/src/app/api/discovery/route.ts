@@ -1,62 +1,70 @@
 import { NextResponse } from "next/server";
-import { z } from "zod";
-import { sendStructuredEmail } from "@/lib/email";
+import { discoverySchema } from "../../../lib/schemas/discovery";
+import { clientIp, rateLimited, sendNotification } from "../../../lib/mailer";
 
-const discoverySchema = z.object({
-  name: z.string().trim().min(2, "Please provide your name."),
-  email: z.string().trim().email("Please provide a valid email."),
-  clinicName: z.string().trim().min(2, "Please provide your clinic name."),
-  selectedDate: z.string().min(1, "Please choose a date."),
-  selectedSlot: z.string().min(1, "Please choose a time."),
-  notes: z.string().trim().max(500).optional().or(z.literal("")),
-});
+// export const runtime = "nodejs";
+// export const dynamic = "force-dynamic";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
+  if (rateLimited(clientIp(req))) {
+    return NextResponse.json({ message: "Too many requests. Please try again in a few minutes." }, { status: 429 });
+  }
+
+  let body: unknown;
   try {
-    const body = await request.json();
-    const parsed = discoverySchema.safeParse(body);
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ message: "Invalid request." }, { status: 400 });
+  }
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        {
-          message: "Validation failed.",
-          errors: parsed.error.flatten().fieldErrors,
-        },
-        { status: 400 }
-      );
-    }
+  if ((body as { honeypot?: string } | null)?.honeypot) {
+    return NextResponse.json({ ok: true });
+  }
 
-    const to = process.env.CONTACT_TO_EMAIL || "buycrazeshop@gmail.com";
-    const data = parsed.data;
+  const parsed = discoverySchema.safeParse(body);
+  if (!parsed.success) {
+    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+    return NextResponse.json({ message: first || "Please check your details." }, { status: 422 });
+  }
 
-    await sendStructuredEmail({
-      to,
-      subject: `Discovery call request from ${data.clinicName}`,
-      heading: "New discovery call request",
-      replyTo: data.email,
+  const d = parsed.data;
+
+  const day = new Date(`${d.date}T12:00:00Z`);
+  const todayUtc = new Date();
+  todayUtc.setUTCHours(0, 0, 0, 0);
+  const dow = day.getUTCDay();
+  if (Number.isNaN(day.getTime()) || day.getTime() < todayUtc.getTime() - 86400000 || dow === 0 || dow === 6) {
+    return NextResponse.json({ message: "Please choose a weekday that is today or later." }, { status: 422 });
+  }
+
+  const dateLabel = day.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+
+  try {
+    await sendNotification({
+      title: "New discovery call request",
+      subject: `Discovery call request: ${d.clinicName}, ${dateLabel} ${d.slot} ET`,
+      replyTo: d.email,
       rows: [
-        { label: "Full name", value: data.name },
-        { label: "Email", value: data.email },
-        { label: "Clinic name", value: data.clinicName },
-        { label: "Preferred date", value: data.selectedDate },
-        { label: "Preferred time", value: data.selectedSlot },
-        { label: "Notes", value: data.notes || "No notes provided" },
+        ["Requested date", dateLabel],
+        ["Requested time", `${d.slot} Eastern Time (ET)`],
+        ["Visitor time zone", d.timezone],
+        ["Name", d.name],
+        ["Email", d.email],
+        ["Clinic", d.clinicName],
+        ["Notes", d.notes],
       ],
     });
-
-    return NextResponse.json({
-      success: true,
-      message: "Discovery call request sent.",
-    });
-  } catch (error) {
-    console.error("Discovery API error:", error);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("[discovery] email failed:", err);
     return NextResponse.json(
-      {
-        message:
-          error instanceof Error && error.message.includes("SMTP")
-            ? "Email delivery is not configured yet. Add SMTP_PASS to enable sending."
-            : "Something went wrong while submitting the discovery call request.",
-      },
+      { message: "We couldn’t send your request right now. Please try again or email us directly." },
       { status: 500 }
     );
   }
