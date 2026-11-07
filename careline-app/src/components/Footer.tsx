@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import styles from "./Footer.module.css";
-import { ArrowUp, ShieldCheck } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 
 export default function Footer() {
   const currentYear = 2026;
@@ -17,71 +18,41 @@ export default function Footer() {
         <div className={styles.footerGrid}>
           {/* Brand Col */}
           <div className={styles.footerBrand}>
-            <a href="/" className={styles.brandLink}>
+            <Link href="/" className={styles.brandLink}>
               <span className={styles.logo} aria-hidden="true">✚</span>
               <span>CareLine Reception</span>
-            </a>
+            </Link>
             <p className={styles.brandDesc}>
               Virtual medical receptionist support for independent clinics and group practices across the United States.
             </p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "0.76rem", color: "#6ee7b7" }}>
-                <ShieldCheck size={14} />
-                <span>Clinic-approved workflows</span>
-              </span>
-            </div>
           </div>
 
-          {/* Nav Col */}
           <div className={styles.footerCol}>
-            <h4>Practice Solutions</h4>
+            <h4>Explore CareLine</h4>
             <ul className={styles.footerLinks}>
               <li>
-                <a href="#services" className={styles.footerLink}>
-                  Live Call Answering
-                </a>
+                <Link href="/services#services-grid" className={styles.footerLink}>Services</Link>
               </li>
               <li>
-                <a href="#services" className={styles.footerLink}>
-                  Appointment Scheduling
-                </a>
+                <Link href="/about" className={styles.footerLink}>Why CareLine</Link>
               </li>
               <li>
-                <a href="#services" className={styles.footerLink}>
-                  Patient Reminders & Recalls
-                </a>
+                <Link href="/calculator" className={styles.footerLink}>Coverage Estimator</Link>
               </li>
               <li>
-                <a href="#calculator" className={styles.footerLink}>
-                  Practice Coverage Estimator
-                </a>
+                <Link href="/how#timeline-title" className={styles.footerLink}>How It Works</Link>
               </li>
             </ul>
           </div>
 
-          {/* Workflows Col */}
           <div className={styles.footerCol}>
             <h4>Getting Started</h4>
             <ul className={styles.footerLinks}>
               <li>
-                <a href="#how" className={styles.footerLink}>
-                  How It Works (3 Steps)
-                </a>
+                <Link href="/contact#scheduler" className={styles.footerLink}>Book a discovery call</Link>
               </li>
               <li>
-                <a href="#about" className={styles.footerLink}>
-                  Why Independent Clinics Choose Us
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className={styles.footerLink}>
-                  Book Discovery Call
-                </a>
-              </li>
-              <li>
-                <a href="mailto:hello@youragency.com" className={styles.footerLink}>
-                  Email Practice Coordinator
-                </a>
+                <Link href="/contact" className={styles.footerLink}>Contact</Link>
               </li>
             </ul>
           </div>
@@ -90,16 +61,15 @@ export default function Footer() {
         {/* Bottom Row */}
         <div className={styles.bottomRow}>
           <span>
-            © <span id="year">{currentYear}</span> CareLine Medical Reception. All rights reserved.
+            © {currentYear} CareLine Medical Reception
           </span>
-          <span>Privacy-conscious workflows · Clinic-approved procedures</span>
           <button
             type="button"
             className={styles.scrollTopBtn}
             onClick={scrollToTop}
-            aria-label="Scroll back to top"
+            aria-label="Back to top"
           >
-            <span>Top</span>
+            <span>Back to top</span>
             <ArrowUp size={14} />
           </button>
         </div>

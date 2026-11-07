@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Navbar.module.css";
-import { Menu, X, ArrowRight, Phone, ChevronRight } from "lucide-react";
+import { Menu, X, ArrowRight, ChevronRight } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -43,7 +44,7 @@ export default function Navbar() {
     { label: "Services", href: "/services" },
     { label: "Why CareLine", href: "/about" },
     { label: "Coverage Estimator", href: "/calculator" },
-    { label: "How it works", href: "/how" },
+    { label: "How It Works", href: "/how" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -55,30 +56,31 @@ export default function Navbar() {
     <>
       <header className={`${styles.navWrapper} ${scrolled ? styles.scrolled : ""}`}>
         <div className={`container ${styles.nav}`}>
-          <a className={styles.brand} href="/" aria-label="CareLine Home">
+          <Link className={styles.brand} href="/" aria-label="CareLine Home">
             <span className={styles.logo} aria-hidden="true">✚</span>
             <span>
               CareLine <span className={styles.brandSub}>Medical Reception</span>
             </span>
-          </a>
+          </Link>
 
           <nav className={styles.navlinks} aria-label="Main Navigation">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 className={`${styles.navLink} ${item.href === pathname ? styles.active : ""}`}
+                aria-current={item.href === pathname ? "page" : undefined}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
           <div className={styles.navActions}>
-            <a className="btn" href="/contact">
+            <Link className="btn" href="/contact#scheduler">
               <span>Book a discovery call</span>
               <ArrowRight size={16} aria-hidden="true" />
-            </a>
+            </Link>
 
             <button
               className={styles.mobileToggle}
@@ -103,14 +105,16 @@ export default function Navbar() {
       <div
         className={`${styles.drawerContent} ${drawerOpen ? styles.open : ""}`}
         role="dialog"
-        aria-modal="true"
+        aria-modal={drawerOpen || undefined}
+        aria-hidden={!drawerOpen}
+        inert={!drawerOpen}
         aria-label="Mobile Navigation Menu"
       >
         <div className={styles.drawerHeader}>
-          <div className={styles.brand}>
+          <Link className={styles.brand} href="/" aria-label="CareLine Home" onClick={handleLinkClick}>
             <span className={styles.logo} aria-hidden="true">✚</span>
             <span>CareLine</span>
-          </div>
+          </Link>
           <button
             className={styles.mobileToggle}
             onClick={() => setDrawerOpen(false)}
@@ -123,32 +127,29 @@ export default function Navbar() {
 
         <nav className={styles.drawerLinks}>
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.href}
               href={item.href}
-              className={styles.drawerLink}
+              className={`${styles.drawerLink} ${item.href === pathname ? styles.active : ""}`}
+              aria-current={item.href === pathname ? "page" : undefined}
               onClick={handleLinkClick}
             >
               <span>{item.label}</span>
               <ChevronRight size={18} color="#8392a1" />
-            </a>
+            </Link>
           ))}
         </nav>
 
         <div className={styles.drawerFooter}>
-          <a href="tel:18005550199" className={styles.drawerPhone}>
-            <Phone size={16} color="var(--blue)" />
-            <span>(800) 555-0199</span>
-          </a>
-          <a
+          <Link
             className="btn"
-            href="/contact"
+            href="/contact#scheduler"
             onClick={handleLinkClick}
             style={{ width: "100%" }}
           >
             <span>Book a discovery call</span>
             <ArrowRight size={16} />
-          </a>
+          </Link>
         </div>
       </div>
     </>

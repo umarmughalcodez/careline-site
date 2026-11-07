@@ -190,6 +190,11 @@
   color: var(--blue);
 }
 
+.drawerLink.active {
+  background: var(--blue-subtle);
+  color: var(--blue);
+}
+
 .drawerFooter {
   margin-top: auto;
   padding-top: 24px;
