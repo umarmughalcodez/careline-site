@@ -8,21 +8,26 @@ export default function TopBar() {
       <div className={`container ${styles.topbarContainer}`}>
         <div className={styles.leftGroup}>
           <span className={styles.liveBadge}>
-            <span className={styles.liveBadgeDot}></span> Live Coverage
+            <span className={styles.liveBadgeDot}></span> Live Call Coverage 24/7
           </span>
-          <span>Virtual receptionist support for independent medical practices</span>
+          <span className={styles.tagline}>
+            Virtual receptionist for medical practices
+          </span>
         </div>
         <div className={styles.rightGroup}>
-          <span>Call coverage · Scheduling · Follow-ups</span>
-          <span style={{ opacity: 0.3 }}>|</span>
+          <span className={styles.serviceList}>
+            Call coverage · Scheduling · Follow-ups
+          </span>
+          <span className={styles.divider}>|</span>
           <a href="tel:18005550199" className={styles.contactLink}>
             <Phone size={13} aria-hidden="true" />
-            <span>(800) 555-0199</span>
+            <span className={styles.phoneFull}>(800) 555-0199</span>
+            <span className={styles.phoneShort}>(92) 300 123 4567</span>
           </a>
-          <span style={{ opacity: 0.3 }}>|</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+          <span className={styles.divider}>|</span>
+          <span className={styles.trustItem}>
             <ShieldCheck size={14} color="#5eead4" aria-hidden="true" />
-            <span>HIPAA-Trained</span>
+            <span className={styles.trustFull}>HIPAA-Trained</span>
           </span>
         </div>
       </div>
