@@ -282,6 +282,21 @@
   line-height: 1.45;
 }
 
+.rangeHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.rangeValue {
+  color: #14796e;
+  font-size: 0.88rem;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .periodField {
   min-width: 0;
   border: 0;
@@ -507,8 +522,82 @@
 }
 
 @media (max-width: 520px) {
+  .page :global(.container) {
+    padding-inline: 8px;
+  }
+
+  .hero {
+    padding: 48px 0 42px;
+  }
+
+  .heroInner {
+    gap: 30px;
+  }
+
+  .eyebrow {
+    margin-bottom: 20px;
+  }
+
+  .heroCopy h1 {
+    margin-bottom: 18px;
+  }
+
+  .heroCopy > p {
+    margin-bottom: 24px;
+    font-size: 1rem;
+  }
+
   .heroCopy > a {
     width: 100%;
+  }
+
+  .heroNote {
+    gap: 14px;
+    padding: 22px 18px;
+    border-radius: 0 8px 8px 0;
+    background: rgba(255, 255, 255, 0.58);
+  }
+
+  .estimatorSection,
+  .detailsSection {
+    padding-block: 50px;
+  }
+
+  .sectionHeading {
+    margin: 0 4px 24px;
+  }
+
+  .estimator {
+    border-radius: 10px;
+  }
+
+  .inputs {
+    gap: 30px;
+    padding: 26px 20px;
+  }
+
+  .results {
+    padding: 28px 22px;
+  }
+
+  .detailsInner {
+    gap: 28px;
+  }
+
+  .detailsIntro {
+    padding-inline: 4px;
+  }
+
+  .detailList article {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    padding-block: 20px;
+  }
+
+  .rangeHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
   }
 
   .periodOptions {
@@ -522,6 +611,7 @@
 
   .resultRows > div {
     align-items: flex-start;
+    gap: 8px;
   }
 }
 
