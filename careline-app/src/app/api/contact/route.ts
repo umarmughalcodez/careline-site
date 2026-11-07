@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/schemas/contact";
+import { sendStructuredEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -16,22 +17,43 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: Connect email delivery using RESEND_API_KEY and CONTACT_TO_EMAIL.
-    // Use a provider such as Resend or a mailer once the environment variables are configured.
-    console.log("Contact inquiry received:", parsed.data);
+    const to = process.env.CONTACT_TO_EMAIL || "buycrazeshop@gmail.com";
+    const data = parsed.data;
 
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    await sendStructuredEmail({
+      to,
+      subject: `New contact inquiry from ${data.clinicName}`,
+      heading: "New clinic inquiry",
+      replyTo: data.workEmail,
+      rows: [
+        { label: "Full name", value: data.name },
+        { label: "Clinic name", value: data.clinicName },
+        { label: "Work email", value: data.workEmail },
+        { label: "Phone", value: data.phone || "Not provided" },
+        { label: "Role", value: data.role },
+        { label: "Practice type", value: data.practiceType },
+        { label: "Providers", value: data.providers },
+        { label: "Coverage needs", value: data.coverage.join(", ") },
+        { label: "Scheduling software", value: data.schedulingSoftware || "Not provided" },
+        { label: "Preferred contact", value: data.preferredContactMethod },
+        { label: "Preferred time", value: data.preferredTime },
+        { label: "Message", value: data.message },
+      ],
+    });
 
     return NextResponse.json({
       success: true,
       message: "Inquiry received.",
-      data: parsed.data,
+      data,
     });
   } catch (error) {
     console.error("Contact API error:", error);
     return NextResponse.json(
       {
-        message: "Something went wrong while submitting the inquiry.",
+        message:
+          error instanceof Error && error.message.includes("SMTP")
+            ? "Email delivery is not configured yet. Add SMTP_PASS to enable sending."
+            : "Something went wrong while submitting the inquiry.",
       },
       { status: 500 }
     );

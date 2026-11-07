@@ -899,12 +899,81 @@
   color: var(--blue);
 }
 
+.discoveryForm {
+  display: grid;
+  gap: 18px;
+}
+
+.discoveryFields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.discoveryField {
+  display: grid;
+  gap: 6px;
+  color: var(--navy);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.discoveryField input,
+.discoveryField textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px 12px;
+  color: var(--navy);
+  font: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.discoveryField textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.discoveryField input:focus,
+.discoveryField textarea:focus {
+  outline: none;
+  border-color: rgba(40, 100, 220, 0.42);
+  box-shadow: 0 0 0 4px rgba(40, 100, 220, 0.08);
+}
+
+.discoveryFieldFull {
+  grid-column: 1 / -1;
+}
+
+.discoveryMessage {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  border: 1px solid rgba(40, 100, 220, 0.16);
+  background: rgba(40, 100, 220, 0.04);
+  color: var(--navy);
+}
+
+.discoveryMessageSuccess {
+  border-color: rgba(28, 155, 145, 0.25);
+  background: rgba(28, 155, 145, 0.08);
+  color: #0f5f59;
+}
+
+.discoveryMessageError {
+  border-color: rgba(179, 38, 30, 0.2);
+  background: rgba(179, 38, 30, 0.06);
+  color: #8e2a2a;
+}
+
 .summaryRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  margin-top: 22px;
+  margin-top: 6px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
 }

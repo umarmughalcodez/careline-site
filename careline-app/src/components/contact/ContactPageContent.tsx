@@ -25,10 +25,10 @@ const contactOptions = [
     tint: "blue",
     icon: Mail,
     title: "Email us",
-    value: "hello@youragency.com",
+    value: "buycrazeshop@gmail.com",
     helper: "Reply within one business day",
     action: "Copy email",
-    href: "mailto:hello@youragency.com",
+    href: "mailto:buycrazeshop@gmail.com",
   },
   {
     id: "call",
@@ -142,14 +142,66 @@ export default function ContactPageContent() {
   const [copied, setCopied] = useState(false);
   const [selectedDate, setSelectedDate] = useState("Tue 14");
   const [selectedSlot, setSelectedSlot] = useState("2:00 PM");
+  const [discoveryForm, setDiscoveryForm] = useState({
+    name: "",
+    email: "",
+    clinicName: "",
+    notes: "",
+  });
+  const [discoveryStatus, setDiscoveryStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [discoveryMessage, setDiscoveryMessage] = useState("");
 
   const handleCopyEmail = async () => {
     try {
-      await navigator.clipboard.writeText("hello@youragency.com");
+      await navigator.clipboard.writeText("buycrazeshop@gmail.com");
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {
       setCopied(false);
+    }
+  };
+
+  const handleDiscoverySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!discoveryForm.name || !discoveryForm.email || !discoveryForm.clinicName) {
+      setDiscoveryStatus("error");
+      setDiscoveryMessage("Please fill in your name, email, and clinic name.");
+      return;
+    }
+
+    setDiscoveryStatus("loading");
+    setDiscoveryMessage("");
+
+    try {
+      const response = await fetch("/api/discovery", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...discoveryForm,
+          selectedDate,
+          selectedSlot,
+        }),
+      });
+
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload?.message || "Unable to send discovery call request.");
+      }
+
+      setDiscoveryStatus("success");
+      setDiscoveryMessage("Your discovery call request has been sent successfully.");
+      setDiscoveryForm({ name: "", email: "", clinicName: "", notes: "" });
+    } catch (error) {
+      setDiscoveryStatus("error");
+      setDiscoveryMessage(
+        error instanceof Error
+          ? error.message
+          : "We couldn't send your discovery call request. Please try again."
+      );
     }
   };
 
@@ -279,7 +331,7 @@ export default function ContactPageContent() {
                   </div>
                   <div>
                     <b>Email</b>
-                    <a href="mailto:hello@youragency.com">hello@youragency.com</a>
+                    <a href="mailto:buycrazeshop@gmail.com">buycrazeshop@gmail.com</a>
                   </div>
                 </div>
 
@@ -398,66 +450,127 @@ export default function ContactPageContent() {
               transition={{ duration: 0.45, delay: 0.08 }}
               className={styles.schedulerCard}
             >
-              <div className={styles.schedulerHeader}>
-                <div>
-                  <div className={styles.schedulerBadge}>Discovery call</div>
-                  <h3>Choose a time</h3>
+              <form onSubmit={handleDiscoverySubmit} className={styles.discoveryForm}>
+                <div className={styles.schedulerHeader}>
+                  <div>
+                    <div className={styles.schedulerBadge}>Discovery call</div>
+                    <h3>Choose a time</h3>
+                  </div>
+                  <span className={styles.schedulerHint}>Request by email</span>
                 </div>
-                <span className={styles.schedulerHint}>Placeholder</span>
-              </div>
 
-              <div className={styles.calendarBox}>
-                <div className={styles.calendarHead}>
-                  <span>October 2026</span>
-                  <span>&nbsp;</span>
+                <div className={styles.calendarBox}>
+                  <div className={styles.calendarHead}>
+                    <span>October 2026</span>
+                    <span>&nbsp;</span>
+                  </div>
+                  <div className={styles.weekRow}>
+                    {schedulerDays.map((day) => (
+                      <span key={day}>{day}</span>
+                    ))}
+                  </div>
+                  <div className={styles.dateGrid}>
+                    {Array.from({ length: 35 }).map((_, index) => {
+                      const dayNumber = index + 6;
+                      const isActive = dayNumber === 14;
+                      return (
+                        <button
+                          key={`${dayNumber}-${index}`}
+                          type="button"
+                          className={`${styles.dateCell} ${isActive ? styles.dateCellActive : ""}`}
+                          onClick={() => setSelectedDate(`Tue ${dayNumber}`)}
+                        >
+                          {dayNumber > 28 ? "" : dayNumber}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className={styles.weekRow}>
-                  {schedulerDays.map((day) => (
-                    <span key={day}>{day}</span>
+
+                <div className={styles.slotWrap}>
+                  {timeSlots.map((slot) => (
+                    <button
+                      key={slot}
+                      type="button"
+                      className={`${styles.slotBtn} ${selectedSlot === slot ? styles.slotBtnActive : ""}`}
+                      onClick={() => setSelectedSlot(slot)}
+                    >
+                      {slot}
+                    </button>
                   ))}
                 </div>
-                <div className={styles.dateGrid}>
-                  {Array.from({ length: 35 }).map((_, index) => {
-                    const dayNumber = index + 6;
-                    const isActive = dayNumber === 14;
-                    return (
-                      <button
-                        key={`${dayNumber}-${index}`}
-                        type="button"
-                        className={`${styles.dateCell} ${isActive ? styles.dateCellActive : ""}`}
-                        onClick={() => setSelectedDate(`Tue ${dayNumber}`)}
-                      >
-                        {dayNumber > 28 ? "" : dayNumber}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
 
-              <div className={styles.slotWrap}>
-                {timeSlots.map((slot) => (
-                  <button
-                    key={slot}
-                    type="button"
-                    className={`${styles.slotBtn} ${selectedSlot === slot ? styles.slotBtnActive : ""}`}
-                    onClick={() => setSelectedSlot(slot)}
-                  >
-                    {slot}
+                <div className={styles.discoveryFields}>
+                  <label className={styles.discoveryField}>
+                    <span>Name</span>
+                    <input
+                      type="text"
+                      value={discoveryForm.name}
+                      onChange={(event) =>
+                        setDiscoveryForm((current) => ({ ...current, name: event.target.value }))
+                      }
+                      placeholder="Your full name"
+                    />
+                  </label>
+
+                  <label className={styles.discoveryField}>
+                    <span>Email</span>
+                    <input
+                      type="email"
+                      value={discoveryForm.email}
+                      onChange={(event) =>
+                        setDiscoveryForm((current) => ({ ...current, email: event.target.value }))
+                      }
+                      placeholder="you@clinic.com"
+                    />
+                  </label>
+
+                  <label className={`${styles.discoveryField} ${styles.discoveryFieldFull}`}>
+                    <span>Clinic</span>
+                    <input
+                      type="text"
+                      value={discoveryForm.clinicName}
+                      onChange={(event) =>
+                        setDiscoveryForm((current) => ({ ...current, clinicName: event.target.value }))
+                      }
+                      placeholder="Clinic name"
+                    />
+                  </label>
+
+                  <label className={`${styles.discoveryField} ${styles.discoveryFieldFull}`}>
+                    <span>Notes (optional)</span>
+                    <textarea
+                      value={discoveryForm.notes}
+                      onChange={(event) =>
+                        setDiscoveryForm((current) => ({ ...current, notes: event.target.value }))
+                      }
+                      placeholder="Tell us what support you need"
+                    />
+                  </label>
+                </div>
+
+                <div className={styles.summaryRow}>
+                  <div>
+                    <div className={styles.summaryLabel}>Selected</div>
+                    <strong>
+                      {selectedDate} · {selectedSlot}
+                    </strong>
+                  </div>
+                  <button type="submit" className="btn" disabled={discoveryStatus === "loading"}>
+                    {discoveryStatus === "loading" ? "Sending..." : "Confirm request"}
                   </button>
-                ))}
-              </div>
-
-              <div className={styles.summaryRow}>
-                <div>
-                  <div className={styles.summaryLabel}>Selected</div>
-                  <strong>
-                    {selectedDate} · {selectedSlot}
-                  </strong>
                 </div>
-                <button type="button" className="btn">
-                  Confirm request
-                </button>
-              </div>
+
+                {discoveryMessage ? (
+                  <div
+                    className={`${styles.discoveryMessage} ${
+                      discoveryStatus === "success" ? styles.discoveryMessageSuccess : ""
+                    } ${discoveryStatus === "error" ? styles.discoveryMessageError : ""}`}
+                  >
+                    {discoveryMessage}
+                  </div>
+                ) : null}
+              </form>
             </motion.div>
           </div>
         </div>
