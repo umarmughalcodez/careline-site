@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./ContactPage.module.css";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
@@ -12,22 +12,28 @@ const toISO = (d: Date) =>
 type Status = "idle" | "loading" | "success" | "error";
 
 export default function DiscoveryScheduler() {
-  const today = useMemo(() => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }, []);
-
-  const [month, setMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
+  const [today, setToday] = useState<Date | null>(null);
+  const [month, setMonth] = useState(() => new Date(1970, 0, 1));
   const [selectedISO, setSelectedISO] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
   const [form, setForm] = useState({ name: "", email: "", clinicName: "", notes: "", honeypot: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      setToday(currentDate);
+      setMonth(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1));
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const monthLabel = month.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-  const isCurrentMonth = month.getFullYear() === today.getFullYear() && month.getMonth() === today.getMonth();
-  const monthsAhead = (month.getFullYear() - today.getFullYear()) * 12 + month.getMonth() - today.getMonth();
+  const isCurrentMonth = today === null || (month.getFullYear() === today.getFullYear() && month.getMonth() === today.getMonth());
+  const monthsAhead = today === null ? 0 : (month.getFullYear() - today.getFullYear()) * 12 + month.getMonth() - today.getMonth();
 
   const cells = useMemo(() => {
     const offset = (new Date(month.getFullYear(), month.getMonth(), 1).getDay() + 6) % 7;
@@ -90,6 +96,10 @@ export default function DiscoveryScheduler() {
       setMessage(err instanceof Error ? err.message : "We couldn’t send your request. Please try again.");
     }
   };
+
+  if (!today) {
+    return <div className={styles.calendarBox} role="status">Loading available times...</div>;
+  }
 
   return (
     <form onSubmit={onSubmit} className={styles.discoveryForm} noValidate>

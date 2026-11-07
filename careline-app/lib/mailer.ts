@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
+import type { Transporter } from "nodemailer";
 
-let transporter: nodemailer.Transporter | null = null;
+let transporter: Transporter | null = null;
 
 function getTransporter() {
   const user = process.env.GMAIL_USER;
