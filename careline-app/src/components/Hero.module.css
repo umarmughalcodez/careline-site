@@ -463,3 +463,11 @@
     animation: none;
   }
 }
+
+.flipWord {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  color: var(--teal); /* swap to var(--blue) if you prefer */
+  z-index: 10;
+}

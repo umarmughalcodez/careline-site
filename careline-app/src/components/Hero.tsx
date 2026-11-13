@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { FlipWords } from "./FlipWords";
 import styles from "./Hero.module.css";
 import {
   PhoneCall,
@@ -59,10 +60,13 @@ export default function Hero() {
           </div>
 
           <h1 className={styles.heroHeading}>
-            Your patients call.
-            <br />
-            <span className={styles.gradientText}>We’re here to help.</span>
-          </h1>
+  Your patients call.
+  <br />
+  <span className={styles.gradientText}>We handle your</span>{" "}
+  <FlipWords
+    words={["calls.", "appointments.", "reminders.", "follow-ups."]}
+  />
+</h1>
 
           <p className={styles.heroLead}>
             Friendly virtual receptionist support for independent clinics—helping manage incoming calls, appointment requests, reminders and follow-ups so your team can focus on patients in front of them.
