@@ -13,11 +13,16 @@ const periods: { value: Period; label: string; days: number }[] = [
 ];
 
 const CALL_STEP = 25;
-const RATE_MIN = 300;
-const RATE_STEP = 20;
-const numberFormat = new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 });
-const decimalFormat = new Intl.NumberFormat("en-PK", { maximumFractionDigits: 2 });
-const formatPkr = (amount: number) => `PKR ${numberFormat.format(Math.round(amount))}`;
+const RATE_MIN = 5;
+const RATE_STEP = 1;
+const numberFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 });
+const decimalFormat = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
+const currencyFormat = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 2,
+});
+const formatUsd = (amount: number) => currencyFormat.format(amount);
 
 export default function CoverageEstimator() {
   const [callsInput, setCallsInput] = useState("250");
@@ -65,9 +70,9 @@ export default function CoverageEstimator() {
           <div className={styles.heroNote}>
             <span className={styles.noteIcon}><PhoneCall size={20} aria-hidden="true" /></span>
             <div>
-              <span className={styles.noteLabel}>Starting rate assumption</span>
-              <strong>PKR 300 <small>/ hour</small></strong>
-              <p>That is PKR 5 per minute. Adjust the hourly rate in PKR 20 steps.</p>
+              <span className={styles.noteLabel}>US rate assumption</span>
+              <strong>{formatUsd(RATE_MIN)} <small>/ hour</small></strong>
+              <p>Adjust the hourly US-dollar rate in $1 steps.</p>
             </div>
           </div>
         </div>
@@ -161,7 +166,7 @@ export default function CoverageEstimator() {
               <div className={styles.field}>
                 <label htmlFor="call-rate">Hourly coverage rate</label>
                 <div className={styles.rateInput}>
-                  <span aria-hidden="true">PKR</span>
+                  <span aria-hidden="true">$</span>
                   <input
                     id="call-rate"
                     type="number"
@@ -187,15 +192,15 @@ export default function CoverageEstimator() {
                   step={RATE_STEP}
                   value={rateSliderValue}
                   aria-label="Adjust hourly coverage rate"
-                  aria-valuetext={`${formatPkr(rateSliderValue)} per hour, ${decimalFormat.format(rateSliderValue / 60)} PKR per minute`}
+                  aria-valuetext={`${formatUsd(rateSliderValue)} per hour, ${formatUsd(rateSliderValue / 60)} per minute`}
                   onChange={(event) => setRateInput(event.target.value)}
                 />
                 <div className={styles.rangeEnds} aria-hidden="true">
-                  <span>PKR {RATE_MIN} / hr</span>
-                  <span>{formatPkr(rateRangeMax)} / hr</span>
+                  <span>{formatUsd(RATE_MIN)} / hr</span>
+                  <span>{formatUsd(rateRangeMax)} / hr</span>
                 </div>
                 <span className={styles.hint}>
-                  About PKR {decimalFormat.format(ratePerMinute)} per minute at this hourly rate.
+                  About {formatUsd(ratePerMinute)} per minute at this hourly rate.
                 </span>
               </div>
 
@@ -211,14 +216,14 @@ export default function CoverageEstimator() {
                 <span className={styles.resultIcon}><CalendarDays size={18} aria-hidden="true" /></span>
               </div>
               <div className={styles.primaryTotal}>
-                <strong>~ {formatPkr(periodEstimate)}</strong>
+                <strong>~ {formatUsd(periodEstimate)}</strong>
                 <span>{selectedPeriod.label.toLowerCase()}</span>
               </div>
               <div className={styles.resultRows}>
                 <div><span>Estimated calls / month</span><strong>~ {numberFormat.format(Math.round(monthlyCalls))}</strong></div>
                 <div><span>Estimated call time / month</span><strong>~ {decimalFormat.format(monthlyHours)} hrs</strong></div>
-                <div><span>Monthly equivalent</span><strong>~ {formatPkr(monthlyEstimate)}</strong></div>
-                <div><span>Yearly equivalent</span><strong>~ {formatPkr(yearlyEstimate)}</strong></div>
+                <div><span>Monthly equivalent</span><strong>~ {formatUsd(monthlyEstimate)}</strong></div>
+                <div><span>Yearly equivalent</span><strong>~ {formatUsd(yearlyEstimate)}</strong></div>
               </div>
               <p className={styles.disclaimer}>
                 Approximate planning estimate based on call duration and the selected hourly rate. Your final quote may vary with coverage hours and agreed scope.
@@ -245,7 +250,7 @@ export default function CoverageEstimator() {
             </article>
             <article>
               <span>02</span>
-              <div><h3>Set a coverage rate</h3><p>Start at PKR 300 per hour, equivalent to PKR 5 per minute, then adjust in PKR 20 increments.</p></div>
+              <div><h3>Set a coverage rate</h3><p>Start at {formatUsd(RATE_MIN)} per hour, then adjust the US-dollar rate in $1 increments.</p></div>
             </article>
             <article>
               <span>03</span>

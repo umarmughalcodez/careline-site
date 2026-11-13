@@ -1,9 +1,17 @@
+// import type { NextConfig } from "next";
+
+// const nextConfig: NextConfig = {
+//   /* config options here */
+//   cacheComponents: true,
+//   partialPrefetching: true,
+// };
+
+// export default nextConfig;
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  allowedDevOrigins: ['192.168.0.100'],
 };
 
 export default nextConfig;

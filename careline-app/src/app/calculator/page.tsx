@@ -8,7 +8,7 @@ import CoverageEstimator from "@/components/CoverageEstimator";
 export const metadata: Metadata = {
   title: "Coverage Estimator | CareLine Medical Reception",
   description:
-    "Estimate medical receptionist call coverage costs in PKR using your call volume, coverage period, and per-call rate.",
+    "Estimate medical receptionist call coverage costs in US dollars using your call volume, coverage period, and hourly rate.",
   alternates: {
     canonical: "/calculator",
   },
