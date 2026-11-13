@@ -42,6 +42,18 @@ export default function Footer() {
               <li>
                 <Link href="/how#timeline-title" className={styles.footerLink}>How It Works</Link>
               </li>
+              <li>
+                <Link href="/privacy-policy" className={styles.footerLink}>Privacy Policy</Link>
+              </li>
+              <li>
+                <Link href="/terms-and-conditions" className={styles.footerLink}>Terms &amp; Conditions</Link>
+              </li>
+              <li>
+                <Link href="/disclaimer" className={styles.footerLink}>Disclaimer</Link>
+              </li>
+              <li>
+                <Link href="/cookie-policy" className={styles.footerLink}>Cookie Policy</Link>
+              </li>
             </ul>
           </div>
 
