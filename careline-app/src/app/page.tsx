@@ -43,6 +43,7 @@ export default function Home() {
         <Reveal as="div" delay={110}>
           <HowItWorks />
         </Reveal>
+        
         <Reveal as="div" delay={70}>
           <CtaBanner />
         </Reveal>

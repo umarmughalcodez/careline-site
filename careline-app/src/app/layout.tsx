@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import ToasterProvider from "../components/ToastProvider";
 import "./globals.css";
+import "lenis/dist/lenis.css";
+import SmoothScroll from "../components/SmoothScroll";
+import CursorFollower from "../components/CursorFollower";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -51,8 +54,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body>
+        <SmoothScroll >
+        <CursorFollower />
+
         {children}
         <ToasterProvider />
+        </SmoothScroll>
       </body>
     </html>
   );

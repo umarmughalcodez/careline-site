@@ -248,9 +248,9 @@ export default function PrivacyPolicyPage() {
                     <h2 id="contact-title">Contact Information</h2>
                   </div>
                   <p>For questions or requests about this Privacy Policy or information you submitted, contact CareLine:</p>
-                  <a className={styles.contactLink} href="mailto:buycrazeshop@gmail.com">
+                  <a className={styles.contactLink} href="mailto:contact@careline.com">
                     <Mail size={18} aria-hidden="true" />
-                    buycrazeshop@gmail.com
+                    contact@careline.com
                   </a>
                   <p>
                     You can also use our <Link href="/contact">contact page</Link> to reach the team.

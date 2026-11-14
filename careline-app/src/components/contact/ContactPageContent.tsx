@@ -146,13 +146,13 @@ export default function ContactPageContent() {
 
   const handleCopyEmail = async () => {
   try {
-    await navigator.clipboard.writeText("buycrazeshop@gmail.com");
+    await navigator.clipboard.writeText("contact@careline.com");
     setCopied(true);
     toast.success("Email address copied!");
     window.setTimeout(() => setCopied(false), 1800);
   } catch {
     setCopied(false);
-    toast.error("Couldn’t copy. Please copy it manually: buycrazeshop@gmail.com");
+    toast.error("Couldn’t copy. Please copy it manually: contact@careline.com");
   }
 };
 
@@ -283,7 +283,7 @@ export default function ContactPageContent() {
                   </div>
                   <div>
                     <b>Email</b>
-                    <a href="mailto:buycrazeshop@gmail.com">buycrazeshop@gmail.com</a>
+                    <a href="mailto:buycrazeshop@gmail.com">contact@careline.com</a>
                   </div>
                 </div>
 
